@@ -1,0 +1,10 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    bunny (0.6.0)
+
+PLATFORMS
+  java
+
+DEPENDENCIES
+  bunny

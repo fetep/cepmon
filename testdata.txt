@@ -1,0 +1,177 @@
+#clear
+#system.load.5.mtv1_stage.adm1 2.9 10
+#system.load.5.mtv1_stage.adm1 2.7 20
+#system.load.5.mtv1_stage.adm1 3.5 30
+#assert load_alert cluster=mtv1_stage avg(value)=3.1 _timestamp=30
+
+#clear
+#system.load.5.mtv1_stage.adm1 3.9 40
+#assert !load_alert
+
+#clear
+#syncstorage.mysql.querytime.average.mtv1_stage.sync1 0.40 10
+#syncstorage.mysql.querytime.average.mtv1_stage.sync1 0.40 15
+#syncstorage.mysql.querytime.average.mtv1_stage.sync1 0.60 20
+#syncstorage.mysql.querytime.average.mtv1_stage.sync1 0.30 25
+#syncstorage.mysql.querytime.average.mtv1_stage.sync1 0.44 30
+#syncstorage.mysql.querytime.average.mtv1_stage.sync1 0.38 35
+#syncstorage.mysql.querytime.average.mtv1_stage.sync1 0.29 40
+#syncstorage.mysql.querytime.average.mtv1_stage.sync1 3.29 45
+#syncstorage.mysql.querytime.average.mtv1_stage.sync1 3.20 50
+#syncstorage.mysql.querytime.average.mtv1_stage.sync1 1.41 55
+#assert mysql_query_time
+
+#clear
+#system.load.5.mtv1_stage.adm1 0.3 0
+#system.load.5.mtv1_stage.adm1 0.4 60
+#system.load.5.mtv1_stage.adm1 1.1 120
+#system.load.5.mtv1_stage.adm1 0.7 180
+#system.load.5.mtv1_stage.adm1 0.8 240
+#system.load.5.mtv1_stage.adm1 2.4 300
+#system.load.5.mtv1_stage.adm1 1.0 360
+#system.load.5.mtv1_stage.adm1 0.7 420
+#system.load.5.mtv1_stage.adm1 0.4 480
+#system.load.5.mtv1_stage.adm1 0.2 540
+#system.load.5.mtv1_stage.adm1 0.9 600
+#system.load.5.mtv1_stage.adm1 1.5 660
+#system.load.5.mtv1_stage.adm1 2.1 720
+#system.load.5.mtv1_stage.adm1 15.8 780
+#system.load.5.mtv1_stage.adm1 16.3 840
+#system.load.5.mtv1_stage.adm1 15.8 900
+#system.load.5.mtv1_stage.adm1 16.3 960
+#system.load.5.mtv1_stage.adm1 14.3 1020
+#system.load.5.mtv1_stage.adm1 14.2 1080
+#system.load.5.mtv1_stage.adm1 14.4 1140
+#system.load.5.mtv1_stage.adm1 14.8 1200
+#system.load.5.mtv1_stage.adm1 13.0 1260
+#system.load.5.mtv1_stage.adm1 12.1 1320
+#system.load.5.mtv1_stage.adm1 10.3 1380
+#system.load.5.mtv1_stage.adm1 9.1 1440
+#system.load.5.mtv1_stage.adm1 7.6 1500
+#system.load.5.mtv1_stage.adm1 6.5 1560
+#system.load.5.mtv1_stage.adm1 6.5 1620
+#assert 20_load_forecast_alerting _timestamp=840
+
+#clear
+#system.load.5.mtv1_stage.adm1 0.3 0
+#system.load.5.mtv1_stage.adm1 0.4 60
+#system.load.5.mtv1_stage.adm1 1.1 120
+#system.load.5.mtv1_stage.adm1 0.7 180
+#system.load.5.mtv1_stage.adm1 0.8 240
+#system.load.5.mtv1_stage.adm1 2.4 300
+#system.load.5.mtv1_stage.adm1 1.0 360
+#system.load.5.mtv1_stage.adm1 0.7 420
+#system.load.5.mtv1_stage.adm1 0.4 480
+#system.load.5.mtv1_stage.adm1 0.2 540
+#system.load.5.mtv1_stage.adm1 0.9 600
+#system.load.5.mtv1_stage.adm1 1.5 660
+#system.load.5.mtv1_stage.adm1 2.1 720
+#system.load.5.mtv1_stage.adm1 10.4 780
+#system.load.5.mtv1_stage.adm1 1.3 840
+#system.load.5.mtv1_stage.adm1 1.8 900
+#system.load.5.mtv1_stage.adm1 1.3 960
+#system.load.5.mtv1_stage.adm1 1.3 1020
+#system.load.5.mtv1_stage.adm1 1.2 1080
+#system.load.5.mtv1_stage.adm1 1.4 1140
+#system.load.5.mtv1_stage.adm1 1.8 1200
+#system.load.5.mtv1_stage.adm1 1.0 1260
+#system.load.5.mtv1_stage.adm1 1.1 1320
+#system.load.5.mtv1_stage.adm1 1.3 1380
+#system.load.5.mtv1_stage.adm1 1.1 1440
+#system.load.5.mtv1_stage.adm1 1.6 1500
+#system.load.5.mtv1_stage.adm1 1.5 1560
+#system.load.5.mtv1_stage.adm1 1.8 1620
+#assert !20_load_forecast_alerting
+##
+#clear
+#system.load.5.mtv1_stage.adm1 0.3 0
+#system.load.5.mtv1_stage.adm1 0.4 60
+#system.load.5.mtv1_stage.adm1 1.1 120
+#system.load.5.mtv1_stage.adm1 0.7 180
+#system.load.5.mtv1_stage.adm1 0.8 240
+#system.load.5.mtv1_stage.adm1 2.4 300
+#system.load.5.mtv1_stage.adm1 1.0 360
+#system.load.5.mtv1_stage.adm1 0.7 420
+#system.load.5.mtv1_stage.adm1 0.4 480
+#system.load.5.mtv1_stage.adm1 0.2 540
+#system.load.5.mtv1_stage.adm1 0.9 600
+#system.load.5.mtv1_stage.adm1 1.5 660
+#system.load.5.mtv1_stage.adm1 2.1 720
+#system.load.5.mtv1_stage.adm1 10.4 780
+#system.load.5.mtv1_stage.adm1 11.9 840
+#system.load.5.mtv1_stage.adm1 8.4 900
+#system.load.5.mtv1_stage.adm1 1.3 960
+#system.load.5.mtv1_stage.adm1 1.3 1020
+#system.load.5.mtv1_stage.adm1 1.2 1080
+#system.load.5.mtv1_stage.adm1 1.4 1140
+#system.load.5.mtv1_stage.adm1 1.8 1200
+#system.load.5.mtv1_stage.adm1 1.0 1260
+#system.load.5.mtv1_stage.adm1 1.1 1320
+#system.load.5.mtv1_stage.adm1 1.3 1380
+#system.load.5.mtv1_stage.adm1 1.1 1440
+#system.load.5.mtv1_stage.adm1 1.6 1500
+#system.load.5.mtv1_stage.adm1 1.5 1560
+#system.load.5.mtv1_stage.adm1 1.8 1620
+#assert !20_load_forecast_alerting
+#
+#clear
+#system.load.5.mtv1_stage.adm1 0.3 0
+#system.load.5.mtv1_stage.adm1 0.4 60
+#system.load.5.mtv1_stage.adm1 1.1 120
+#system.load.5.mtv1_stage.adm1 0.7 180
+#system.load.5.mtv1_stage.adm1 0.8 240
+#system.load.5.mtv1_stage.adm1 2.4 300
+#system.load.5.mtv1_stage.adm1 1.0 360
+#system.load.5.mtv1_stage.adm1 0.7 420
+#system.load.5.mtv1_stage.adm1 0.4 480
+#system.load.5.mtv1_stage.adm1 0.2 540
+#system.load.5.mtv1_stage.adm1 0.9 600
+#system.load.5.mtv1_stage.adm1 1.5 660
+#system.load.5.mtv1_stage.adm1 2.1 720
+#system.load.5.mtv1_stage.adm1 10.4 780
+#system.load.5.mtv1_stage.adm1 11.9 840
+#system.load.5.mtv1_stage.adm1 11.8 900
+#system.load.5.mtv1_stage.adm1 11.3 960
+#system.load.5.mtv1_stage.adm1 1.3 1020
+#system.load.5.mtv1_stage.adm1 1.2 1080
+#system.load.5.mtv1_stage.adm1 1.4 1140
+#system.load.5.mtv1_stage.adm1 1.8 1200
+#system.load.5.mtv1_stage.adm1 1.0 1260
+#system.load.5.mtv1_stage.adm1 1.1 1320
+#system.load.5.mtv1_stage.adm1 1.3 1380
+#system.load.5.mtv1_stage.adm1 1.1 1440
+#system.load.5.mtv1_stage.adm1 1.6 1500
+#system.load.5.mtv1_stage.adm1 1.5 1560
+#system.load.5.mtv1_stage.adm1 1.8 1620
+#assert 20_load_forecast_alerting _timestamp=960
+
+clear
+mysql.qps.mtv1_stage.adm1 109 0
+mysql.qps.mtv1_stage.adm1 87 60
+mysql.qps.mtv1_stage.adm1 90 120
+mysql.qps.mtv1_stage.adm1 95 180
+mysql.qps.mtv1_stage.adm1 104 240
+mysql.qps.mtv1_stage.adm1 100 300
+mysql.qps.mtv1_stage.adm1 92 360
+mysql.qps.mtv1_stage.adm1 100 420
+mysql.qps.mtv1_stage.adm1 104 480
+mysql.qps.mtv1_stage.adm1 95 540
+mysql.qps.mtv1_stage.adm1 350 600
+mysql.qps.mtv1_stage.adm1 320 660
+mysql.qps.mtv1_stage.adm1 300 720
+mysql.qps.mtv1_stage.adm1 304 780
+mysql.qps.mtv1_stage.adm1 309 840
+mysql.qps.mtv1_stage.adm1 300 900
+mysql.qps.mtv1_stage.adm1 140 960
+mysql.qps.mtv1_stage.adm1 100 1020
+mysql.qps.mtv1_stage.adm1 95 1080
+mysql.qps.mtv1_stage.adm1 94 1140
+mysql.qps.mtv1_stage.adm1 100 1200
+mysql.qps.mtv1_stage.adm1 105 1260
+mysql.qps.mtv1_stage.adm1 102 1320
+mysql.qps.mtv1_stage.adm1 98 1380
+mysql.qps.mtv1_stage.adm1 89 1440
+mysql.qps.mtv1_stage.adm1 75 1500
+mysql.qps.mtv1_stage.adm1 98 1560
+mysql.qps.mtv1_stage.adm1 100 1620
+#assert 20_load_forecast_alerting _timestamp=960

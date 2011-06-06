@@ -1,0 +1,8 @@
+#!/usr/bin/env jruby
+
+$: << File.join(File.dirname($0), "..", "lib")
+$: << File.join(File.dirname($0), "..", "vendor", "jar")
+
+require "cepmon/runner"
+
+CEPMon::Runner.main(["test", ARGV].flatten)
