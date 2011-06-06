@@ -39,6 +39,32 @@ namespace :vendor do
   task :gems => "vendor" do
     sh "bundle install --path #{File.join("vendor", "bundle")}"
   end
+
+
+  file "vendor/meteo/com/ning/metrics/meteo/esper" do |t|
+    mkdir_p t.name
+  end
+
+  file "vendor/meteo/com/ning/metrics/meteo/publishers" do |t|
+    mkdir_p t.name
+  end
+
+  meteo_giturl = "https://raw.github.com/ning/meteo/master/src/main/java/com/ning/metrics/meteo"
+
+  ["esper/HoltWintersComputer.java", "esper/HoltWinters.java", "esper/HoltWintersViewFactory.java", "esper/TPAggregator.java", "publishers/EsperListener.java"].each do |f|
+    file "vendor/meteo/com/ning/metrics/meteo/#{f}" => ["vendor/meteo/com/ning/metrics/meteo/esper", "vendor/meteo/com/ning/metrics/meteo/publishers"] do |t|
+      sh "wget -O #{t.name} #{meteo_giturl}/#{f}"
+    end
+  end
+
+  task :meteo_compile do
+    sh "cd vendor/meteo && javac -cp ../jar/esper-4.2.0/esper-4.2.0.jar:../jar/esper-4.2.0/esper/lib/log4j-1.2.16.jar com/ning/metrics/meteo/*/*.java"
+    sh "cd vendor/meteo && jar cf meteo.jar com/ning/metrics/meteo/*/*.class"
+  end
+
+  task :meteo => ["vendor/meteo/com/ning/metrics/meteo/esper/HoltWintersComputer.java", "vendor/meteo/com/ning/metrics/meteo/esper/HoltWinters.java", "vendor/meteo/com/ning/metrics/meteo/esper/HoltWintersViewFactory.java", "vendor/meteo/com/ning/metrics/meteo/esper/TPAggregator.java", "vendor/meteo/com/ning/metrics/meteo/publishers/EsperListener.java", :meteo_compile] do
+    # nothing
+  end
 end
 
 task :compile do
@@ -58,7 +84,7 @@ task :compile do
 end
 
 namespace :package do
-  task :jar => ["vendor:esper", "vendor:jruby", "vendor:gems", "compile"] do
+  task :jar => ["vendor:esper", "vendor:jruby", "vendor:gems", "vendor:meteo", "compile"] do
     build_dir = "build/jar"
     mkdir_p build_dir
     Dir.glob("vendor/{bundle,jar}/**/*.jar").each do |jar|
