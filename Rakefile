@@ -87,7 +87,7 @@ namespace :package do
   task :jar => ["vendor:esper", "vendor:jruby", "vendor:gems", "vendor:meteo", "compile"] do
     build_dir = "build/jar"
     mkdir_p build_dir
-    Dir.glob("vendor/{bundle,jar}/**/*.jar").each do |jar|
+    Dir.glob("vendor/{bundle,jar,meteo}/**/*.jar").each do |jar|
       relative = File.join(build_dir.split(File::SEPARATOR).collect { ".." })
       Dir.chdir(build_dir) { sh "jar xf #{relative}/#{jar}" }
     end
@@ -110,7 +110,7 @@ namespace :package do
     jar_update_args = []
 
     gem_dirs = %w{doc gems specifications}
-    gem_root = File.join("vendor", "bundle", "jruby", "1.8")
+    gem_root = File.join("vendor", "bundle", "*", "1.8")
     jar_update_args += gem_dirs.collect { |d| ["-C", gem_root, d] }.flatten
 
     # compiled runner
