@@ -1,0 +1,6 @@
+.bundle
+*.gem
+*.jar
+*.swp
+build/*
+vendor/*
