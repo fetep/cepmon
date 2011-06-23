@@ -37,7 +37,7 @@ namespace :vendor do
   end
 
   task :gems => "vendor" do
-    sh "bundle install --path #{File.join("vendor", "bundle")}"
+    sh "jruby -S bundle install --path #{File.join("vendor", "bundle")}"
   end
 
 
@@ -110,7 +110,7 @@ namespace :package do
     jar_update_args = []
 
     gem_dirs = %w{doc gems specifications}
-    gem_root = File.join("vendor", "bundle", "*", "1.8")
+    gem_root = File.join("vendor", "bundle", "jruby", "1.8")
     jar_update_args += gem_dirs.collect { |d| ["-C", gem_root, d] }.flatten
 
     # compiled runner
