@@ -5,24 +5,25 @@ require "cepmon/test"
 
 java_import org.apache.log4j.ConsoleAppender
 java_import org.apache.log4j.Level
-java_import org.apache.log4j.Logger
 java_import org.apache.log4j.SimpleLayout
+JLogger = org.apache.log4j.Logger
 
 module CEPMon
   class Runner
     def self.main(argv)
       layout = SimpleLayout.new()
       appender = ConsoleAppender.new(layout)
-      Logger.getRootLogger().addAppender(appender)
-      Logger.getRootLogger().setLevel(Level::WARN)
+      JLogger.getRootLogger().addAppender(appender)
+      JLogger.getRootLogger().setLevel(Level::WARN)
 
       command = argv.shift
+      config_file = argv.shift || "cepmon.cfg"
       case command
       when "test"
-        config = CEPMon::Config.new
+        config = CEPMon::Config.new(config_file)
         CEPMon::Test.new(config).run(argv)
       when "mon"
-        config = CEPMon::Config.new
+        config = CEPMon::Config.new(config_file)
         CEPMon::Mon.new(config).run(argv)
       else
         $stderr.puts "invalid command #{command}"
