@@ -3,23 +3,8 @@
 $: << File.join(File.dirname($0), "..", "lib")
 $: << File.join(File.dirname($0), "..", "vendor", "jar")
 
-require "cepmon/config"
-require "cepmon/engine"
-require "cepmon/eventlistener"
-require "cepmon/libs"
-require "cepmon/metric"
+require "cepmon/runner"
 
-Logger = org.apache.log4j.Logger
-layout = org.apache.log4j.SimpleLayout.new()
-appender = org.apache.log4j.ConsoleAppender.new(layout)
-Logger.getRootLogger().addAppender(appender)
-Logger.getRootLogger().setLevel(org.apache.log4j.Level::WARN)
+$stdout.sync = true
 
-config = CEPMon::Config.new
-engine = CEPMon::Engine.new
-event_listener = CEPMon::EventListener.new
-
-engine.add_statements(config, event_listener)
-
-# pull metrics off amqp,
-# CEPMon::Metric.new(metric_string).send(engine.runtime)
+CEPMon::Runner.main(["mon", ARGV].flatten)

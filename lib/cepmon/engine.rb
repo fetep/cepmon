@@ -32,6 +32,8 @@ module CEPMon
         TimerControlEvent.new(TimerControlEvent::ClockType::CLOCK_EXTERNAL)
       )
       @time = nil
+
+      @start = Time.now.to_i
     end # def initialize
 
     public
@@ -62,5 +64,10 @@ module CEPMon
         @time = new_time
       end
     end # def set_time
+
+    public
+    def uptime
+      return Time.now.to_i - @start
+    end # def uptime
   end # class Engine
 end # class CEPmon

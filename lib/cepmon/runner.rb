@@ -1,5 +1,6 @@
 require "cepmon/config"
 require "cepmon/libs"
+require "cepmon/mon"
 require "cepmon/test"
 
 java_import org.apache.log4j.ConsoleAppender
@@ -21,6 +22,8 @@ module CEPMon
         config = CEPMon::Config.new
         CEPMon::Test.new(config).run(argv)
       when "mon"
+        config = CEPMon::Config.new
+        CEPMon::Mon.new(config).run(argv)
       else
         $stderr.puts "invalid command #{command}"
         exit(1)

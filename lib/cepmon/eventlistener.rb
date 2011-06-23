@@ -7,9 +7,10 @@ module CEPMon
     attr_reader :history
 
     public
-    def initialize(keep_history=false)
+    def initialize(engine, keep_history=false)
       super()
 
+      @engine = engine
       @keep_history = keep_history
       @history = []
     end
@@ -24,7 +25,7 @@ module CEPMon
         vars = {}
         e.getProperties().each { |k, v| vars[k] = v }
         vars["_timestamp"] = timestamp
-        puts "event: #{statement.getName} @#{timestamp}: #{vars.inspect}"
+        puts "event: #{statement.getName} @#{timestamp} (engine.uptime=#{@engine.uptime}): #{vars.inspect}"
         if @keep_history
           @history << [statement.getName, vars]
         end

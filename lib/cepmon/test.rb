@@ -7,7 +7,7 @@ module CEPMon
     def initialize(config)
       @config = config
       @engine = CEPMon::Engine.new
-      @event_listener = CEPMon::EventListener.new(true)
+      @event_listener = CEPMon::EventListener.new(@engine, true)
       @engine.add_statements(@config, @event_listener)
     end
 
