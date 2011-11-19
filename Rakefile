@@ -22,7 +22,7 @@ namespace :vendor do
   end
 
   file "vendor/jar/esper-#{VERSIONS[:esper]}.tar.gz" => "vendor/jar" do |t|
-    baseurl = "http://dist.codehaus.org/esper"
+    baseurl = "http://dist.codehaus.org/esper/prior-releases"
     if !File.exists?(t.name)
       sh "wget -O #{t.name} #{baseurl}/#{File.basename(t.name)}"
     end
@@ -58,7 +58,7 @@ namespace :vendor do
   end
 
   task :meteo_compile do
-    sh "cd vendor/meteo && javac -cp ../jar/esper-4.2.0/esper-4.2.0.jar:../jar/esper-4.2.0/esper/lib/log4j-1.2.16.jar com/ning/metrics/meteo/*/*.java"
+    sh "cd vendor/meteo && javac -cp ../jar/esper-#{VERSIONS[:esper]}/esper-#{VERSIONS[:esper]}.jar:../jar/esper-#{VERSIONS[:esper]}/esper/lib/log4j-1.2.16.jar com/ning/metrics/meteo/*/*.java"
     sh "cd vendor/meteo && jar cf meteo.jar com/ning/metrics/meteo/*/*.class"
   end
 
