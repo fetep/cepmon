@@ -1,0 +1,64 @@
+# vim:syntax=ruby
+# "metric" events have attributes:  name, host, cluster, value
+
+amqp_input :host => "localhost",
+           :user => "guest",
+           :password => "guest",
+           :vhost => "/",
+           :name => "stats",
+           :type => "exchange"
+
+statement :name => "00_metric_host",
+          :epl => "insert into metric_host select name, host, cluster, avg(value) as value, stddev(value) as stddev from metric.win:time(1 minute) group by name, host, cluster",
+          :listen => false
+
+# keep a running 5 minute average for the cluster-level value, update every 3 minutes
+
+OUTLIER_FACTOR = 2.5
+
+def forecast_cluster(metric, passed_opts = {})
+  opts = {
+    :alpha => 0.1,
+    :beta => 0.1,
+    :outlier_factor => 2.5,
+    :monitor => :both,
+    :every => "30 minutes",
+  }.merge(passed_opts)
+
+  metric_safe = metric.gsub('.', '_')
+  statement :name => "01_metric_cluster_#{metric}",
+            :epl => "insert into metric_cluster select name, cluster, sum(value) as value from metric_host(name='#{metric}').win:time_batch(1 minute) group by name, cluster",
+            :listen => false
+  #          #:epl => "insert into metric_cluster select name, cluster, sum(value) as value from metric(name='#{metric}').win:time_batch(1 minute) group by name, cluster",
+
+  # prediction tracking (cluster level)
+  statement :name => "10_predict_tracking_cluster_#{metric}",
+            :epl => "insert into metric_predictions_cluster_#{metric_safe} select metric.name as name, metric.value as value, metric.cluster as cluster, predict.lastRaw + #{opts[:outlier_factor]} * predict.deviation as upper_bound, predict.lastRaw - #{opts[:outlier_factor]} * predict.deviation as lower_bound from metric_cluster(name='#{metric}').cepmon:predict(value, #{opts[:alpha]}, #{opts[:beta]}) as predict, metric_cluster(name='#{metric}').win:time_batch(15 min) as metric group by metric.cluster",
+            :listen => false
+
+  if [:both, :spike].member?(opts[:monitor])
+    statement :name => "20_spike_violations_tracking_cluster_#{metric}",
+              :epl => "insert into metric_spike_violations_cluster_#{metric_safe} select name, cluster, value, upper_bound, lower_bound from metric_predictions_cluster_#{metric_safe} where (value > upper_bound)",
+              :listen => false
+    statement :name => "30_spike_alerts_cluster_#{metric}",
+              :epl => "select count(*), cluster, value, lower_bound, upper_bound from metric_spike_violations_cluster_#{metric_safe}.win:time(10 minutes) group by cluster having count(*) > 5 output first every #{opts[:every]}",
+              :listen => true
+  end
+
+  if [:both, :drop].member?(opts[:monitor])
+    statement :name => "20_drop_violations_tracking_cluster_#{metric}",
+              :epl => "insert into metric_drop_violations_cluster_#{metric_safe} select name, cluster, value, upper_bound, lower_bound from metric_predictions_cluster_#{metric_safe} where (value < lower_bound)",
+              :listen => false
+    statement :name => "30_drop_alerts_cluster_#{metric}",
+              :epl => "select count(*), cluster, value, lower_bound, upper_bound from metric_drop_violations_cluster_#{metric_safe}.win:time(10 minutes) group by cluster having count(*) > 5 output first every #{opts[:every]}",
+              :listen => true
+  end
+end
+
+forecast_cluster('exceptions', :monitor => :spike)
+forecast_cluster('hits.200')
+forecast_cluster('hits.401')
+forecast_cluster('hits.302')
+forecast_cluster('hits.503')
+forecast_cluster('hits.404')
+
