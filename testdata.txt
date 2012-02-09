@@ -1,14 +1,39 @@
 clear
+
 browserid.stats.verifier.verify_time.mean.stage.web1_idweb 11.34 10
-browserid.stats.verifier.verify_time.mean.stage.web1_idweb 9.45 55
-browserid.stats.verifier.verify_time.mean.stage.web1_idweb 10.43 100
+browserid.stats.verifier.verify_time.mean.stage.web2_idweb 10.97 10
+
+browserid.stats.verifier.verify_time.mean.stage.web1_idweb 8.80 55
+browserid.stats.verifier.verify_time.mean.stage.web2_idweb 9.45 55
+
+browserid.stats.verifier.verify_time.mean.stage.web1_idweb 12.41 100
+browserid.stats.verifier.verify_time.mean.stage.web2_idweb 10.43 100
+
 browserid.stats.verifier.verify_time.mean.stage.web1_idweb 9.89 145
-browserid.stats.verifier.verify_time.mean.stage.web1_idweb 12.32 190
-browserid.stats.verifier.verify_time.mean.stage.web1_idweb 14.44 235
+browserid.stats.verifier.verify_time.mean.stage.web2_idweb 7.74 145
+
+browserid.stats.verifier.verify_time.mean.stage.web1_idweb 11.89 190
+browserid.stats.verifier.verify_time.mean.stage.web2_idweb 12.32 190
+
+browserid.stats.verifier.verify_time.mean.stage.web1_idweb 13.83 235
+browserid.stats.verifier.verify_time.mean.stage.web2_idweb 10.44 235
+
 browserid.stats.verifier.verify_time.mean.stage.web1_idweb 15.88 280
+browserid.stats.verifier.verify_time.mean.stage.web2_idweb 8.39 280
+
 browserid.stats.verifier.verify_time.mean.stage.web1_idweb 19.32 325
-browserid.stats.verifier.verify_time.mean.stage.web1_idweb 24.92 370
-browserid.stats.verifier.verify_time.mean.stage.web1_idweb 23.97 415
+browserid.stats.verifier.verify_time.mean.stage.web2_idweb 10.11 325
+
+browserid.stats.verifier.verify_time.mean.stage.web1_idweb 22.00 370
+browserid.stats.verifier.verify_time.mean.stage.web2_idweb 9.44 370
+
+browserid.stats.verifier.verify_time.mean.stage.web1_idweb 25.43 415
+browserid.stats.verifier.verify_time.mean.stage.web2_idweb 9.19 415
+
 browserid.stats.verifier.verify_time.mean.stage.web1_idweb 25.01 450
+browserid.stats.verifier.verify_time.mean.stage.web2_idweb 9.23 450
+
 browserid.stats.verifier.verify_time.mean.stage.web1_idweb 22.88 495
+browserid.stats.verifier.verify_time.mean.stage.web2_idweb 10.33 495
+
 assert 10_alerts_cluster_sla_gt_browserid_stats_verifier_verify_time_mean
