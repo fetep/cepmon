@@ -1,5 +1,5 @@
 require "cepmon/engine"
-require "cepmon/eventlistener"
+require "cepmon/eventlistener/stdout"
 require "cepmon/metric"
 
 module CEPMon
@@ -7,7 +7,7 @@ module CEPMon
     def initialize(config)
       @config = config
       @engine = CEPMon::Engine.new
-      @event_listener = CEPMon::EventListener.new(@engine, true)
+      @event_listener = CEPMon::EventListener::Stdout.new(@engine, true)
       @engine.add_statements(@config, @event_listener)
     end
 
