@@ -1,5 +1,5 @@
 require "cepmon/engine"
-require "cepmon/eventlistener"
+require "cepmon/eventlistener/stdout"
 require "cepmon/metric"
 require "rubygems"
 require "bunny"
