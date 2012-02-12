@@ -1,9 +1,11 @@
 module CEPMon
   class Config
+    attr_reader :amqp
     attr_reader :statements
 
     public
     def initialize(cfg_file="cepmon.cfg")
+      @amqp = {}
       @statements = {}
 
       instance_eval(File.read(cfg_file))
@@ -35,6 +37,7 @@ module CEPMon
 
     private
     def amqp_input(params)
+      @amqp = params
     end # def amqp_input
   end # class Config
 end # module CEPMon
