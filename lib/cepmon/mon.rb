@@ -21,7 +21,7 @@ module CEPMon
         CEPMon::Admin.run!(:host => "0.0.0.0", :port => 8989)
       end
 
-      amqp = Bunny.new(:user => "guest", :pass => "guest")
+      amqp = Bunny.new(@config.amqp)
       amqp.start
       queue = amqp.queue("cepmon-#{Process.pid}", :auto_delete => true)
       exchange = amqp.exchange("stats", :type => :topic, :durable => true)
