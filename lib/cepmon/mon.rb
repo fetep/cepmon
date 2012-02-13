@@ -1,16 +1,16 @@
 require "cepmon/admin"
 require "cepmon/engine"
-require "cepmon/eventlistener/stdout"
+require "cepmon/eventlistener"
 require "cepmon/metric"
 require "rubygems"
 require "bunny"
 
-module CEPMon
+class CEPMon
   class Mon
     def initialize(config)
       @config = config
       @engine = CEPMon::Engine.new
-      @event_listener = CEPMon::EventListener::Stdout.new(@engine, true)
+      @event_listener = CEPMon::EventListener.new(@engine)
       @engine.add_statements(@config, @event_listener)
     end
 
@@ -33,4 +33,4 @@ module CEPMon
       end
     end # def run
   end # class Mon
-end # module CEPMon
+end # class CEPMon

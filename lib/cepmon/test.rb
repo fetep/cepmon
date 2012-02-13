@@ -1,13 +1,13 @@
 require "cepmon/engine"
-require "cepmon/eventlistener/stdout"
+require "cepmon/eventlistener"
 require "cepmon/metric"
 
-module CEPMon
+class CEPMon
   class Test
     def initialize(config)
       @config = config
       @engine = CEPMon::Engine.new
-      @event_listener = CEPMon::EventListener::Stdout.new(@engine, true)
+      @event_listener = CEPMon::EventListener.new(@engine)
       @engine.add_statements(@config, @event_listener)
     end
 
@@ -38,7 +38,7 @@ module CEPMon
             end
 
             # make sure the statement fired
-            hist = @event_listener.history.select { |h| h[0] == statement }
+            hist = @event_listener.alerts.select { |key, alert| alert.statement == statement }
             if hist.length == 0
               raise "#{file}:#{linenum}: assert #{statement} failed, did not fire"
             end
@@ -61,7 +61,7 @@ module CEPMon
       end # args.each
     end # def run
   end # class Test
-end # module CEPMon
+end # class CEPMon
 
 #Logger = org.apache.log4j.Logger
 #layout = org.apache.log4j.SimpleLayout.new()
