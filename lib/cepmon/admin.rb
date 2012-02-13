@@ -1,7 +1,7 @@
 require "rubygems"
 require "sinatra/base"
 
-module CEPMon
+class CEPMon
   class Admin < Sinatra::Base
     @@engine = nil
 
@@ -21,4 +21,4 @@ module CEPMon
       "Here, with engine! #{@@engine.inspect}"
     end
   end # class Admin
-end # module CEPMon
+end # class CEPMon
