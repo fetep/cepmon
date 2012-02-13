@@ -1,6 +1,6 @@
 require "cepmon/libs"
 
-module CEPMon
+class CEPMon
   class Metric < Java::JavaUtil::HashMap
     def initialize(metric)
       super()
