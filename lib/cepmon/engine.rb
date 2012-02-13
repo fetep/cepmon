@@ -6,7 +6,7 @@ java_import com.espertech.esper.client.time.TimerControlEvent
 java_import java.util.HashMap
 
 
-module CEPMon
+class CEPMon
   class Engine
     attr_reader :engine
     attr_reader :admin

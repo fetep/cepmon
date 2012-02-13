@@ -1,4 +1,4 @@
-module CEPMon
+class CEPMon
   class Config
     attr_reader :amqp
     attr_reader :statements
@@ -40,4 +40,4 @@ module CEPMon
       @amqp = params
     end # def amqp_input
   end # class Config
-end # module CEPMon
+end # class CEPMon

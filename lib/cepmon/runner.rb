@@ -8,7 +8,7 @@ java_import org.apache.log4j.Level
 java_import org.apache.log4j.SimpleLayout
 JLogger = org.apache.log4j.Logger
 
-module CEPMon
+class CEPMon
   class Runner
     def self.main(argv)
       layout = SimpleLayout.new()
@@ -31,7 +31,7 @@ module CEPMon
       end
     end
   end # class Runner
-end # module CEPMon
+end # class CEPMon
 
 
 if __FILE__ == $0
