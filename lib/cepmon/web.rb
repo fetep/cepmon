@@ -6,6 +6,10 @@ class CEPMon
   class Web < Sinatra::Base
     @@event_listener = nil
 
+    set :root, File.join(File.dirname(__FILE__), "..", "..")
+    set :public_folder, Proc.new { File.join(root, "static") }
+    enable :static
+
     def self.event_listener=(event_listener)
       @@event_listener = event_listener
     end
@@ -29,15 +33,13 @@ class CEPMon
     end
 
     get "/history" do
-      content_type "text/plain"
-
-      @@event_listener.history.collect { |a| a.to_s }.join("\n")
+      @history = @@event_listener.history
+      erb :history
     end
 
     get "/alerts" do
-      content_type "text/plain"
-
-      @@event_listener.alerts.collect { |a| a.to_s }.join("\n")
+      @alerts = @@event_listener.alerts
+      erb :alerts
     end
   end # class Web
 end # class CEPMon

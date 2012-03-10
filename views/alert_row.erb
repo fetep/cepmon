@@ -1,0 +1,21 @@
+<tr>
+  <td>
+    <%= Time.at(@alert.timestamp) %>
+  </td>
+  <td>
+    <% if @alert.expired? %>
+      <span class="label">expired</span>
+    <% else %>
+      <span class="label label-important">active</span>
+    <% end %>
+  </td>
+  <td>
+    <%= @alert.name %>
+  </td>
+  <td>
+    <%= @alert.cluster %>
+  </td>
+  <td>
+    <%= @alert.host.tr("_", ".") %>
+  </td>
+</tr>

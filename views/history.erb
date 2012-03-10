@@ -1,0 +1,23 @@
+<div class="page-header">
+  <h1>
+    Alert History
+  </h1>
+</div>
+
+<table class="table table-condensed table-bordered table-striped">
+  <thead>
+    <tr>
+      <td>Timestamp</td>
+      <td>State</td>
+      <td>Metric Name</td>
+      <td>Cluster</td>
+      <td>Host</td>
+    </tr>
+  </thead>
+  <tbody>
+    <% @history.reverse.each do |alert| %>
+      <% @alert = alert %>
+      <%= erb :alert_row %>
+    <% end %>
+  </tbody>
+</table>
