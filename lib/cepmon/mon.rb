@@ -1,7 +1,7 @@
-require "cepmon/admin"
 require "cepmon/engine"
 require "cepmon/eventlistener"
 require "cepmon/metric"
+require "cepmon/web"
 require "rubygems"
 require "bunny"
 
@@ -17,8 +17,8 @@ class CEPMon
     def run(args)
       Thread::abort_on_exception = true
       @admin = Thread.new do
-        CEPMon::Admin.engine = @engine
-        CEPMon::Admin.run!(:host => "0.0.0.0", :port => 8989)
+        CEPMon::Web.event_listener = @event_listener
+        CEPMon::Web.run!(:host => "0.0.0.0", :port => 8989)
       end
 
       amqp = Bunny.new(@config.amqp)
