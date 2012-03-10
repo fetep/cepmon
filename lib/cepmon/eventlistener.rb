@@ -56,7 +56,7 @@ class CEPMon
 
     public
     def alerts
-      @alerts.delete_if { |key, alert| ! alert.expired? }
+      @alerts.delete_if { |key, alert| alert.expired? }
     end
   end # class EventListener
 end # class CEPMon
