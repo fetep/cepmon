@@ -1,5 +1,6 @@
 require "rubygems"
 require "sinatra/base"
+require "thread"
 
 class CEPMon
   class Web < Sinatra::Base
@@ -7,6 +8,16 @@ class CEPMon
 
     def self.event_listener=(event_listener)
       @@event_listener = event_listener
+    end
+
+    def self.run!(*args, &block)
+      started = false
+      super(*args) do |server|
+        Thread.current[:sinatra] = self
+        started = true
+        yield(server) if block_given?
+      end
+      raise "error starting sinatra" unless started
     end
 
     def initialize(*args)

@@ -69,5 +69,10 @@ class CEPMon
     def uptime
       return Time.now.to_i - @start
     end # def uptime
+
+    public
+    def stop
+      @engine.stop
+    end # def stop
   end # class Engine
 end # class CEPmon
