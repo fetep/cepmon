@@ -1,4 +1,5 @@
 require "rubygems"
+require "cgi"
 require "sinatra/base"
 require "thread"
 
@@ -30,6 +31,12 @@ class CEPMon
       end
 
       super(*args)
+    end
+
+    helpers do
+      def h(html)
+        CGI::escapeHTML(html.to_s)
+      end
     end
 
     get "/history" do
