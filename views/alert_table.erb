@@ -1,0 +1,18 @@
+<table class="table table-condensed table-bordered table-striped">
+  <thead>
+    <tr>
+      <td>Timestamp</td>
+      <td>State</td>
+      <td>Metric Name</td>
+      <td>Cluster</td>
+      <td>Host</td>
+      <td>Reason</td>
+    </tr>
+  </thead>
+  <tbody>
+    <% @alerts.reverse.each do |alert| %>
+      <% @alert = alert %>
+      <%= erb :alert_row %>
+    <% end %>
+  </tbody>
+</table>
