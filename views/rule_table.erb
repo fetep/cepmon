@@ -1,0 +1,15 @@
+<table class="table table-condensed table-bordered table-striped">
+  <thead>
+    <tr>
+      <td>Name</td>
+      <td>Metric</td>
+      <td>Condition</td>
+    </tr>
+  </thead>
+  <tbody>
+    <% @rules.sort_by { |r| r[:name] }.each do |rule| %>
+      <% @rule = rule %>
+      <%= erb :rule_row %>
+    <% end %>
+  </tbody>
+</table>

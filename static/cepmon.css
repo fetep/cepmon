@@ -1,0 +1,9 @@
+.rule-grid {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    line-height: 20px;
+}
+
+.rule-grid:hover {
+    background: #ddd;
+}

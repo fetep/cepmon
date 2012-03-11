@@ -1,0 +1,43 @@
+<div class="container">
+
+  <div class="row rule-grid">
+    <div class="span2">
+      <strong>Rule Name</strong>
+    </div>
+    <div class="span6">
+      <%=h @rule[:statement] %>
+    </div>
+  </div>
+
+  <div class="row rule-grid">
+    <div class="span2">
+      <strong>Metric</strong>
+    </div>
+    <div class="span6">
+      <%=h @rule[:name] %>
+    </div>
+  </div>
+
+  <div class="row rule-grid">
+    <div class="span2">
+      <strong>Condition</strong>
+    </div>
+    <div class="span6">
+      <%=h @rule[:operator] %>
+      <%=h @rule[:threshold] %>
+      <%=h @rule[:units] %>
+      for
+      <%=h @rule[:average_over] %>
+    </div>
+  </div>
+
+  <div class="row rule-grid">
+    <div class="span2">
+      <strong>EPL</strong>
+    </div>
+    <div class="span6">
+      <code><%=h @rule[:epl] %></code>
+    </div>
+  </div>
+
+</div>

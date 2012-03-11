@@ -1,0 +1,15 @@
+<tr>
+  <td>
+    <%= rule_link(@rule[:statement], @rule[:statement]) %>
+  </td>
+  <td>
+    <%=h @rule[:name] %>
+  </td>
+  <td>
+    <%=h @rule[:operator] %>
+    <%=h @rule[:threshold] %>
+    <%=h @rule[:units] %>
+    for
+    <%=h @rule[:average_over] %>
+  </td>
+</tr>
