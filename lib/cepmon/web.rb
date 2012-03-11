@@ -35,15 +35,7 @@ class CEPMon
 
     helpers do
       def h(obj)
-        text = case obj.type
-        when Float
-          sprintf "%.2f", obj
-        when String
-          obj
-        else
-          obj.to_s
-        end
-        CGI::escapeHTML(text)
+        CGI::escapeHTML(obj.to_s)
       end
     end
 
