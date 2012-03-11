@@ -36,6 +36,17 @@ class CEPMon
     end # def statement
 
     private
+    def statement_name(name)
+      i = 1
+      while true
+        proposed = [name, i].join("_")
+        break unless @statements.member?(proposed)
+        i += 1
+      end
+      return proposed
+    end
+
+    private
     def amqp_input(params)
       @amqp = params
     end # def amqp_input
