@@ -37,7 +37,7 @@ class CEPMon
           @shutting_down = true
           @web_thread[:sinatra].quit!(@server, "")
           amqp.stop
-          @engine.stop
+          @engine.destroy
         end
       end
 
