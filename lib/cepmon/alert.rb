@@ -3,6 +3,7 @@ class CEPMon
     public
     def initialize(opts = {})
       @vars = opts.dup
+      @vars[:value] = sprintf "%.02f", @vars[:value].to_f
       @vars[:expires] = @vars[:timestamp] + 120
       @vars[:reason] = "#{@vars[:value]} #{@vars[:operator]} #{@vars[:threshold]} #{@vars[:units]} for #{@vars[:average_over]}"
     end # def initialize
