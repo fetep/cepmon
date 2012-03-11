@@ -2,7 +2,7 @@ class CEPMon
   class Alert
     public
     def initialize(opts = {})
-      @vars = opts
+      @vars = opts.dup
       @vars[:expires] = @vars[:timestamp] + 120
       @vars[:reason] = "#{@vars[:value]} #{@vars[:operator]} #{@vars[:threshold]} #{@vars[:units]} for #{@vars[:average_over]}"
     end # def initialize
