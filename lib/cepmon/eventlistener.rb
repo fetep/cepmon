@@ -7,6 +7,7 @@ class CEPMon
   class EventListener < Java::JavaLang::Object
     include com.espertech.esper.client.StatementAwareUpdateListener
 
+    attr_reader :engine
     attr_reader :history
 
     public
