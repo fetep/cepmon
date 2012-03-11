@@ -2,7 +2,6 @@ class CEPMon
   class Alert
     public
     def initialize(opts = {})
-      $stderr.puts "in #{self.class}, initialize opts = #{opts.inspect}"
       @vars = opts
       @vars[:expires] = @vars[:timestamp] + 120
       @vars[:reason] = "#{@vars[:value]} #{@vars[:operator]} #{@vars[:threshold]} #{@vars[:units]} for #{@vars[:duration]}"
