@@ -20,7 +20,7 @@ class CEPMon
 
     public
     def to_s
-      "#{Time.at(@vars[:timestamp])} [ALERT] cluster=#{@vars[:cluster]}/host=#]{@vars[:host} " +
+      "#{Time.at(@vars[:timestamp])} [ALERT] cluster=#{@vars[:cluster]}/host=#{@vars[:host]} " +
       "| name=#{@vars[:name]} | value=#{@vars[:value]} | statement=#{@vars[:statement]}"
     end # def to_s
   end # class Alert
