@@ -34,13 +34,21 @@ class CEPMon
     end
 
     helpers do
-      def h(html)
-        CGI::escapeHTML(html.to_s)
+      def h(obj)
+        text = case obj.type
+        when Float
+          sprintf "%.2f", obj
+        when String
+          obj
+        else
+          obj.to_s
+        end
+        CGI::escapeHTML(text)
       end
     end
 
     get "/history" do
-      @history = @@event_listener.history
+      @alerts = @@event_listener.history
       erb :history
     end
 
