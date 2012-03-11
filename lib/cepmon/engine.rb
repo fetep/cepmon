@@ -33,6 +33,9 @@ class CEPMon
       )
       @time = nil
 
+      # keep track of statement metadata
+      @statement_md = {}
+
       @start = Time.now.to_i
     end # def initialize
 
@@ -40,9 +43,32 @@ class CEPMon
     def add_statements(config, event_listener)
       config.statements.sort.each do |name, opts|
         statement = @admin.createEPL(opts[:epl], name.to_s)
-        statement.addListener(event_listener) unless opts[:listen] == false
+        statement.addListener(event_listener)
+        @statement_md[name] = opts[:metadata] ? opts[:metadata] : {}
       end
     end # def add_statements
+
+    public
+    def statements
+      res = []
+      @admin.getStatementNames.each do |name|
+        statement = @admin.getStatement(name)
+        data = {
+          :name => name,
+          :state => statement.getState,
+          :text => statement.getText,
+          :last_change => statement.getTimeLastStateChange,
+        }
+        res << data
+      end
+
+      return res
+    end
+
+    public
+    def statement_metadata(name)
+      return @statement_md[name]
+    end
 
     private
     def add_type_maps
@@ -71,8 +97,8 @@ class CEPMon
     end # def uptime
 
     public
-    def stop
-      @engine.stop
-    end # def stop
+    def destroy
+      @engine.destroy
+    end # def destroy
   end # class Engine
 end # class CEPmon

@@ -21,7 +21,7 @@ class CEPMon
 
     private
     def statement(params)
-      required = [:name, :epl]
+      required = [:name, :epl, :metadata]
       if not verify_present(params, required)
         raise "required parameters (#{required.inspect}) missing from statement: #{params.inspect}"
       end

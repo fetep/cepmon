@@ -25,16 +25,15 @@ class CEPMon
 
       new_events.each do |e|
         timestamp = provider.getEPRuntime.getCurrentTime / 1000
-        vars = {}
+        vars = @engine.statement_metadata(statement.getName)
         e.getProperties().each { |k, v| vars[k.to_sym] = v }
         vars[:statement] = statement.getName
         vars[:timestamp] = timestamp
-        puts "event: #{statement.getName} @#{timestamp} (#{Time.at(timestamp.to_i)}) (engine.uptime=#{@engine.uptime}): #{vars.collect { |h, k| [h, k].join("=") }.join(" ")}"
-        if statement.getName =~ /_alerts_/
-          alert = CEPMon::Alert.new(vars)
-          add_alert(alert)
-          $stderr.puts alert.to_s
-        end
+
+        puts "event: #{statement.getName} @#{timestamp} (#{Time.at(timestamp.to_i)}) (engine.uptime=#{@engine.uptime}): #{vars.collect { |h, k| [h, k.inspect].join("=") }.join(" ")}"
+        $stderr.puts "event vars=#{vars.inspect}"
+        alert = CEPMon::Alert.new(vars)
+        add_alert(alert)
       end
     end # def update
 

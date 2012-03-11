@@ -4,7 +4,7 @@ class CEPMon
     def initialize(opts = {})
       @vars = opts
       @vars[:expires] = @vars[:timestamp] + 120
-      @vars[:reason] = "#{@vars[:value]} #{@vars[:operator]} #{@vars[:threshold]} #{@vars[:units]} for #{@vars[:duration]}"
+      @vars[:reason] = "#{@vars[:value]} #{@vars[:operator]} #{@vars[:threshold]} #{@vars[:units]} for #{@vars[:average_over]}"
     end # def initialize
 
     public
