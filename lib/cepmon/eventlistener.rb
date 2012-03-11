@@ -36,7 +36,9 @@ class CEPMon
                                     :name => vars["name"],
                                     :value => vars["value"],
                                     :threshold => vars["threshold"],
-                                    :operator => vars["operator"])
+                                    :operator => vars["operator"],
+                                    :duration => vars["duration"],
+                                    :units => vars["units"])
           add_alert(alert)
           $stderr.puts alert.to_s
         end
@@ -58,7 +60,7 @@ class CEPMon
 
     public
     def alerts
-      @alerts.delete_if { |key, alert| alert.expired? }
+      @alerts.delete_if { |key, alert| alert.expired? }.values
     end
   end # class EventListener
 end # class CEPMon
