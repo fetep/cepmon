@@ -10,12 +10,17 @@
     <% end %>
   </td>
   <td>
-    <%= @alert.name %>
+    <%=h @alert.name %>
   </td>
   <td>
     <%= @alert.cluster %>
   </td>
   <td>
     <%= @alert.host.tr("_", ".") %>
+  </td>
+  <td>
+    <%=h @alert.value %>
+    <%=h @alert.operator %>
+    <%=h @alert.threshold %>
   </td>
 </tr>
