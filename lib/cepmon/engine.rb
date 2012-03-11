@@ -51,15 +51,12 @@ class CEPMon
     public
     def statements
       res = []
-      @admin.getStatementNames.each do |name|
+      @statement_md.each do |name, md|
         statement = @admin.getStatement(name)
-        data = {
-          :name => name,
-          :state => statement.getState,
-          :text => statement.getText,
-          :last_change => statement.getTimeLastStateChange,
-        }
-        res << data
+        md[:statement] = name
+        md[:epl] = statement.getText
+        md[:last_change] = statement.getTimeLastStateChange
+        res << md
       end
 
       return res
