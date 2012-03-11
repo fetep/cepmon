@@ -26,19 +26,12 @@ class CEPMon
       new_events.each do |e|
         timestamp = provider.getEPRuntime.getCurrentTime / 1000
         vars = {}
-        e.getProperties().each { |k, v| vars[k] = v }
+        e.getProperties().each { |k, v| vars[k.to_sym] = v }
+        vars[:statement] = statement.getName
+        vars[:timestamp] = timestamp
         puts "event: #{statement.getName} @#{timestamp} (#{Time.at(timestamp.to_i)}) (engine.uptime=#{@engine.uptime}): #{vars.collect { |h, k| [h, k].join("=") }.join(" ")}"
         if statement.getName =~ /_alerts_/
-          alert = CEPMon::Alert.new(:statement => statement.getName,
-                                    :timestamp => timestamp,
-                                    :host => vars["host"],
-                                    :cluster => vars["cluster"],
-                                    :name => vars["name"],
-                                    :value => vars["value"],
-                                    :threshold => vars["threshold"],
-                                    :operator => vars["operator"],
-                                    :duration => vars["duration"],
-                                    :units => vars["units"])
+          alert = CEPMon::Alert.new(vars)
           add_alert(alert)
           $stderr.puts alert.to_s
         end
