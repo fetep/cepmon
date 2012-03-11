@@ -23,5 +23,10 @@ class CEPMon
       "#{Time.at(@vars[:timestamp])} [ALERT] cluster=#{@vars[:cluster]}/host=#{@vars[:host]} " +
       "| name=#{@vars[:name]} | value=#{@vars[:value]} | statement=#{@vars[:statement]}"
     end # def to_s
+
+    public
+    def to_json(*args)
+      @vars.to_json(*args)
+    end # def to_json
   end # class Alert
 end # class CEPMon

@@ -1,5 +1,6 @@
 require "rubygems"
 require "cgi"
+require "json"
 require "sinatra/base"
 require "thread"
 require "uri"
@@ -77,6 +78,13 @@ class CEPMon
     get "/alerts" do
       @alerts = filter_alerts(@@event_listener.alerts, params)
       erb :alerts
+    end
+
+    get "/alerts.json" do
+      @alerts = filter_alerts(@@event_listener.alerts, params)
+
+      content_type "application/json"
+      {:alerts => @alerts}.to_json
     end
   end # class Web
 end # class CEPMon
