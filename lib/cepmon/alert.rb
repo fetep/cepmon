@@ -1,34 +1,26 @@
 class CEPMon
   class Alert
-    attr_reader :host
-    attr_reader :cluster
-    attr_reader :name
-    attr_reader :value
-    attr_reader :statement
-    attr_reader :timestamp
-    attr_reader :expires
-
     public
     def initialize(opts = {})
       $stderr.puts "in #{self.class}, initialize opts = #{opts.inspect}"
-      @host = opts[:host]
-      @cluster = opts[:cluster]
-      @name = opts[:name]
-      @value = opts[:value]
-      @statement = opts[:statement]
-      @timestamp = opts[:timestamp]
-      @expires = @timestamp + 120
+      @vars = opts
+      @vars[:expires] = @vars[:timestamp] + 120
     end # def initialize
 
     public
+    def method_missing(method)
+      @vars[method]
+    end
+
+    public
     def expired?
-      Time.now.to_f > @expires
+      Time.now.to_f > @vars[:expires]
     end # def expired?
 
     public
     def to_s
-        "#{Time.at(@timestamp)} [ALERT] cluster=#{@cluster}/host=#{@host} " +
-        "| name=#{@name} | value=#{@value} | statement=#{@statement}"
+      "#{Time.at(@vars[:timestamp])} [ALERT] cluster=#{@vars[:cluster]}/host=#]{@vars[:host} " +
+      "| name=#{@vars[:name]} | value=#{@vars[:value]} | statement=#{@vars[:statement]}"
     end # def to_s
   end # class Alert
 end # class CEPMon

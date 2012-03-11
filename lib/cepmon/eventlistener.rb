@@ -34,7 +34,9 @@ class CEPMon
                                     :host => vars["host"],
                                     :cluster => vars["cluster"],
                                     :name => vars["name"],
-                                    :value => vars["value"])
+                                    :value => vars["value"],
+                                    :threshold => vars["threshold"],
+                                    :operator => vars["operator"])
           add_alert(alert)
           $stderr.puts alert.to_s
         end
