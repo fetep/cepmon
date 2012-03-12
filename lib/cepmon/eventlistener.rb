@@ -20,7 +20,6 @@ class CEPMon
     end
 
     public
-    #def self.update(new_events, old_events)
     def update(new_events, old_events, statement, provider)
       return unless new_events
 
@@ -33,8 +32,7 @@ class CEPMon
 
         puts "event: #{statement.getName} @#{timestamp} (#{Time.at(timestamp.to_i)}) (engine.uptime=#{@engine.uptime}): #{vars.collect { |h, k| [h, k.inspect].join("=") }.join(" ")}"
         $stderr.puts "event vars=#{vars.inspect}"
-        alert = CEPMon::Alert.new(vars)
-        add_alert(alert)
+        record_alert(vars, statement.getName)
       end
     end # def update
 
@@ -45,15 +43,29 @@ class CEPMon
     end # def clear
 
     public
-    def add_alert(alert)
-      key = [alert.name, alert.host, alert.cluster]
-      @alerts[key] = alert
-      @history << alert
+    def record_alert(vars, statement_name)
+      alert_key = [statement_name, vars[:host], vars[:cluster]]
+      expire_alerts
+
+      key = [vars[:name], vars[:host], vars[:cluster]]
+      if @alerts[key]
+        @alerts[key].update(vars)
+      else
+        alert = CEPMon::Alert.new(vars)
+        @alerts[key] = alert
+        @history << alert
+      end
+    end
+
+    public
+    def expire_alerts
+      @alerts.delete_if { |key, alert| alert.expired? }.values
     end
 
     public
     def alerts
-      @alerts.delete_if { |key, alert| alert.expired? }.values
+      expire_alerts
+      return @alerts.values
     end
   end # class EventListener
 end # class CEPMon

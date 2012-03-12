@@ -46,8 +46,8 @@ class CEPMon
 
       def filter_alerts(alerts, params)
         res = alerts
-        if params[:statement]
-          res.delete_if { |a| a.statement != params[:statement] }
+        if params[:rule]
+          res.delete_if { |a| a.statement != params[:rule] }
         end
         if params[:cluster]
           res.delete_if { |a| a.cluster != params[:cluster] }

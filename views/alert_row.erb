@@ -1,12 +1,16 @@
+<% expired = @alert.expired? %>
 <tr>
-  <td>
-    <%= Time.at(@alert.timestamp) %>
-  </td>
   <td>
     <%= rule_link(@alert.statement, @alert.statement) %>
   </td>
   <td>
-    <% if @alert.expired? %>
+    <%= Time.at(@alert.started) %>
+    <% if expired %>
+      - <%= Time.at(@alert.expires) %>
+    <% end %>
+  </td>
+  <td>
+    <% if expired %>
       <span class="label">expired</span>
     <% else %>
       <span class="label label-important">active</span>

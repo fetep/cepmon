@@ -1,32 +1,53 @@
 class CEPMon
   class Alert
+    attr_reader :started
+    attr_reader :expires
+
     public
-    def initialize(opts = {})
-      @vars = opts.dup
-      @vars[:value] = sprintf "%.02f", @vars[:value].to_f
-      @vars[:expires] = @vars[:timestamp] + 120
-      @vars[:reason] = "#{@vars[:value]} #{@vars[:operator]} #{@vars[:threshold]} #{@vars[:units]} for #{@vars[:average_over]}"
+    def initialize(data)
+      @data = {}
+      @started = data[:timestamp]
+      update(data)
     end # def initialize
 
     public
+    def update(data)
+      data[:value] = sprintf "%.02f", data[:value].to_f
+
+      @data.merge!(data)
+      @expires = data[:timestamp] + 120
+    end
+
+    public
     def method_missing(method)
-      @vars[method]
+      @data[method]
     end
 
     public
     def expired?
-      Time.now.to_f > @vars[:expires]
+      Time.now.to_i > @expires
     end # def expired?
 
     public
+    def reason
+      "#{@data[:value]} #{@data[:operator]} #{@data[:threshold]} " \
+      "#{@data[:units]} for #{@data[:average_over]}"
+    end
+
+    public
     def to_s
-      "#{Time.at(@vars[:timestamp])} [ALERT] cluster=#{@vars[:cluster]}/host=#{@vars[:host]} " +
-      "| name=#{@vars[:name]} | value=#{@vars[:value]} | statement=#{@vars[:statement]}"
+      "#{Time.at(@data[:timestamp])} [ALERT] cluster=#{@data[:cluster]}/host=#{@data[:host]} " +
+      "| name=#{@data[:name]} | value=#{@data[:value]} | statement=#{@data[:statement]}"
     end # def to_s
 
     public
     def to_json(*args)
-      @vars.to_json(*args)
+      @data.merge({
+        :started => @started,
+        :expires => @expires,
+        :expired => expired?,
+        :reason => reason,
+      }).to_json(*args)
     end # def to_json
   end # class Alert
 end # class CEPMon
