@@ -1,5 +1,6 @@
 # Most of this magic borrowed from logstash's Makefile.
 
+CEPMON_VERSION = 0.2
 VERSIONS = {
   :jruby => "1.6.0",
   :esper => "4.2.0",
@@ -104,7 +105,7 @@ namespace :package do
       File.delete(File.join(builddir, "META-INF", file)) rescue nil
     end
 
-    target_jar = "cepmon-0.1.jar"
+    target_jar = "build/cepmon-#{CEPMON_VERSION}.jar"
     sh "jar cfe #{target_jar} cepmon.runner -C #{build_dir} ."
 
     jar_update_args = []
@@ -118,5 +119,13 @@ namespace :package do
 
     sh "jar uf #{target_jar} #{jar_update_args.join(" ")}"
     sh "jar i #{target_jar}"
+  end
+
+  task :rpm => ["package:jar"] do
+    root = "build/root"
+    cepmon_dir = File.join(root, "opt/cepmon")
+    mkdir_p cepmon_dir
+    cp "build/cepmon-#{CEPMON_VERSION}.jar", cepmon_dir
+    sh "cd build; fpm -t rpm -d jre -a noarch -n cepmon -v #{CEPMON_VERSION} -s dir -C root opt"
   end
 end
