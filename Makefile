@@ -25,7 +25,7 @@ compile_meteo:
 fetch: fetch_esper fetch_meteo extract_esper compile_meteo
 
 jar:
-	warble execute jar
+	warble executable jar
 
 rpm:
 	rm -rf build/root
