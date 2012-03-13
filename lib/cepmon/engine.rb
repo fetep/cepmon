@@ -19,9 +19,9 @@ class CEPMon
       add_type_maps
 
       # tp(pct, value) function to get top pct% percentile
-      @ep_config.addPlugInAggregationFunction("tp", "com.ning.metrics.meteo.esper.TPAggregator")
+      #@ep_config.addPlugInAggregationFunction("tp", "com.ning.metrics.meteo.esper.TPAggregator")
 
-      @ep_config.addPlugInView("cepmon", "predict", "com.ning.metrics.meteo.esper.HoltWintersViewFactory")
+      #@ep_config.addPlugInView("cepmon", "predict", "com.ning.metrics.meteo.esper.HoltWintersViewFactory")
 
       @engine = EPServiceProviderManager.getDefaultProvider(@ep_config)
       @admin = @engine.getEPAdministrator

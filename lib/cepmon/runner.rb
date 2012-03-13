@@ -1,3 +1,7 @@
+$: << File.join(File.dirname(__FILE__), "..")
+
+require "rubygems"
+
 require "cepmon/config"
 require "cepmon/libs"
 require "cepmon/mon"
