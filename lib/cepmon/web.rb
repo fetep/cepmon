@@ -9,9 +9,8 @@ class CEPMon
   class Web < Sinatra::Base
     @@event_listener = nil
 
-    set :root, File.join(File.dirname(__FILE__), "..", "..")
+    set :root, File.expand_path(File.join(File.dirname(__FILE__), "..", ".."))
     set :public_folder, Proc.new { File.join(root, "static") }
-    enable :static
 
     def self.event_listener=(event_listener)
       @@event_listener = event_listener
@@ -57,6 +56,17 @@ class CEPMon
         end
         return res
       end
+    end
+
+    # This is lame, but sinatra's built-in static routes don't seem
+    # to work right when packed in a jar.
+    get %r{/static/(.+)} do |file|
+      if file =~ /\.css$/
+        content_type "text/css"
+      elsif file =~ /\.js$/
+        content_type "text/javascript"
+      end
+      File.read(File.join(settings.public_folder, file))
     end
 
     get "/rules" do
