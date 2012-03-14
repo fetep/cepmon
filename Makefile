@@ -31,5 +31,5 @@ rpm:
 	rm -rf build/root
 	mkdir -p build/root/opt/cepmon
 	cp cepmon.jar build/root/opt/cepmon/cepmon.jar
-	(cd build; fpm -t rpm -d jre -a noarch -n logstash -v $(CEPMON_VERSION) -s dir -C root opt)
+	(cd build; fpm -t rpm -d jre -a noarch -n cepmon -v $(CEPMON_VERSION) -s dir -C root opt)
 
