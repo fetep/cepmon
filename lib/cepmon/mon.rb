@@ -20,7 +20,7 @@ class CEPMon
       @server = nil
       @web_thread = Thread.new do
         CEPMon::Web.event_listener = @event_listener
-        CEPMon::Web.run!(:host => "0.0.0.0", :port => 8989) do |server|
+        CEPMon::Web.run!(:host => @config.host, :port => @config.port) do |server|
           @server = server
         end
       end

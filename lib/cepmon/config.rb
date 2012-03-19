@@ -1,12 +1,16 @@
 class CEPMon
   class Config
     attr_reader :amqp
+    attr_reader :host
+    attr_reader :port
     attr_reader :statements
 
     public
     def initialize(cfg_file="cepmon.cfg")
       @amqp = {}
       @statements = {}
+      @host = "0.0.0.0"
+      @port = 8989
 
       instance_eval(File.read(cfg_file))
     end # def initialize
@@ -93,5 +97,11 @@ class CEPMon
                          "output first every 90 seconds",
                 :metadata => md
     end # def threshold
+
+    private
+    def listen(host, port = 8989)
+      @host = host
+      @port = port.to_i
+    end
   end # class Config
 end # class CEPMon
