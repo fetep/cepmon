@@ -25,5 +25,11 @@ class CEPMon
       # send the value
       engine.runtime.sendEvent(self, "metric")
     end
+
+    def to_s
+      ["host", "cluster", "name", "value", "timestamp"].collect do |v|
+        "#{v}=#{self[v]}"
+      end.join(" ")
+    end
   end
 end
