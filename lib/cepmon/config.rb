@@ -93,7 +93,8 @@ class CEPMon
                          "win:time(#{opts[:average_over]})." +
                          "stat:uni(value, #{group_by}) " +
                          "group by #{group_by} " +
-                         "having average > #{opts[:threshold]} " +
+                         "having average " +
+                         "#{opts[:operator]} #{opts[:threshold]} " +
                          "output first every 90 seconds",
                 :metadata => md
     end # def threshold
