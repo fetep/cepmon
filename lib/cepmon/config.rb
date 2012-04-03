@@ -141,20 +141,37 @@ def threshold_counter(name, metric, passed_opts = {})
             :listen => false
 
       statement :name => name,
-                :epl  => "select 
-                            average as value, 
-                            cluster, 
-                            host 
-                          from 
-                            metric_delta_stream(name='#{metric}').std:groupwin(#{group_by}).win:time(#{opts[:average_over]}).stat:uni(value, #{group_by})
-                          group by 
-                            #{group_by} 
-                         having 
-                           average #{opts[:operator]} #{opts[:threshold]} 
-                         output 
-                           first every 90 seconds",
+                :epl  => "select average as value, cluster, host from metric_delta_stream(name='#{metric}').std:groupwin(#{group_by}).win:time(#{opts[:average_over]}).stat:uni(value, #{group_by}) group by #{group_by} having average #{opts[:operator]} #{opts[:threshold]} output first every 90 seconds",
                 :metadata => md
     end # def threshold_counter
+
+# This should work, but it doesn't....
+#private
+#def missing_metric(name, metric, passed_opts = {})
+#      opts = {
+#        :level => :host,  # :cluster or :host
+#        :out_to_lunch => "5 min",
+#      }.merge(passed_opts)
+#
+#      metric_safe = metric.tr('.', '_')
+#      case opts[:level]
+#      when :cluster
+#        group_by = "name, cluster"
+#        select = "name, cluster"
+#      when :host
+#        group_by = "name, cluster, host"
+#        select = "name, host, cluster"
+#      else
+#        raise ArgumentError, "unknown :level (#{opts[:level]})"
+#      end
+#
+#      md = opts
+#      md[:name] = metric
+#
+#      statement :name => name,
+#            :epl => "select * from metric(name='#{metric}').std:groupwin(#{group_by}).win:time(#{opts[:out_to_lunch]}).std:lastevent().std:size() where size = 0 group by #{group_by}",
+#            :metadata => md
+#    end # def missing_metric
 
 
     private
