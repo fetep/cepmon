@@ -6,7 +6,6 @@ require "bunny"
 $stderr.puts "being loaded"
 
 class CEPMon
-
   class EventListener < Java::JavaLang::Object
     include com.espertech.esper.client.StatementAwareUpdateListener
 
@@ -16,6 +15,7 @@ class CEPMon
     public
     def initialize(engine, config)
       super()
+
       @config = config
       @engine = engine
       @alerts = {}
@@ -25,6 +25,7 @@ class CEPMon
     public
     def update(new_events, old_events, statement, provider)
       return unless new_events
+
       amqp = Bunny.new(@config.amqp)
       amqp.start()
       exchange = amqp.exchange(@config.amqp[:exchange_alerts] , :type => :topic, :durable => true)
@@ -34,6 +35,7 @@ class CEPMon
         e.getProperties().each { |k, v| vars[k.to_sym] = v }
         vars[:statement] = statement.getName
         vars[:timestamp] = timestamp
+
         puts "event: #{statement.getName} @#{timestamp} (#{Time.at(timestamp.to_i)}) (engine.uptime=#{@engine.uptime}): #{vars.collect { |h, k| [h, k.inspect].join("=") }.join(" ")}"
         $stderr.puts "event vars=#{vars.inspect}"
         record_alert(vars, statement.getName, exchange)
