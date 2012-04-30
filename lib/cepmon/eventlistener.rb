@@ -21,11 +21,15 @@ class CEPMon
       @alerts = {}
       @history = []
 
-      @amqp = Bunny.new(@config.amqp)
-      @amqp.start
-      @exchange = @amqp.exchange(@config.amqp[:exchange_alerts],
-                                 :type => :topic,
-                                 :durable => true)
+      if @config.amqp[:exchange_alerts]
+        @amqp = Bunny.new(@config.amqp)
+        @amqp.start
+        @exchange = @amqp.exchange(@config.amqp[:exchange_alerts],
+                                   :type => :topic,
+                                   :durable => true)
+      else
+        @exchange = nil
+      end
     end
 
     public
@@ -61,7 +65,7 @@ class CEPMon
         @alerts[key].update(vars)
       else
         alert = CEPMon::Alert.new(vars)
-        exchange.publish(alert.to_json)
+        exchange.publish(alert.to_json) if exchange
         @alerts[key] = alert
         @history << alert
       end
