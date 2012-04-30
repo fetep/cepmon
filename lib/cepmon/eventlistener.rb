@@ -20,15 +20,18 @@ class CEPMon
       @engine = engine
       @alerts = {}
       @history = []
+
+      @amqp = Bunny.new(@config.amqp)
+      @amqp.start
+      @exchange = @amqp.exchange(@config.amqp[:exchange_alerts],
+                                 :type => :topic,
+                                 :durable => true)
     end
 
     public
     def update(new_events, old_events, statement, provider)
       return unless new_events
 
-      amqp = Bunny.new(@config.amqp)
-      amqp.start()
-      exchange = amqp.exchange(@config.amqp[:exchange_alerts] , :type => :topic, :durable => true)
       new_events.each do |e|
         timestamp = provider.getEPRuntime.getCurrentTime / 1000
         vars = @engine.statement_metadata(statement.getName)
@@ -38,9 +41,8 @@ class CEPMon
 
         puts "event: #{statement.getName} @#{timestamp} (#{Time.at(timestamp.to_i)}) (engine.uptime=#{@engine.uptime}): #{vars.collect { |h, k| [h, k.inspect].join("=") }.join(" ")}"
         $stderr.puts "event vars=#{vars.inspect}"
-        record_alert(vars, statement.getName, exchange)
+        record_alert(vars, statement.getName, @exchange)
       end
-      amqp.stop
     end # def update
 
     public
