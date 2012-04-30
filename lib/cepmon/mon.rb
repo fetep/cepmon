@@ -10,7 +10,7 @@ class CEPMon
     def initialize(config)
       @config = config
       @engine = CEPMon::Engine.new
-      @event_listener = CEPMon::EventListener.new(@engine)
+      @event_listener = CEPMon::EventListener.new(@engine, @config)
       @engine.add_statements(@config, @event_listener)
       @shutting_down = false
     end
