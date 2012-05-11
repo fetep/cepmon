@@ -30,6 +30,12 @@ class CEPMon
       else
         @exchange = nil
       end
+
+      if @config.log_path
+        @log = File.open(@config.log_path, "a+")
+      else
+        @log = nil
+      end
     end
 
     public
@@ -66,6 +72,7 @@ class CEPMon
       else
         alert = CEPMon::Alert.new(vars)
         exchange.publish(alert.to_json) if exchange
+        @log.puts alert.to_json if @log
         @alerts[key] = alert
         @history << alert
       end

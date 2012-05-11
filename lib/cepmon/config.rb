@@ -2,6 +2,7 @@ class CEPMon
   class Config
     attr_reader :amqp
     attr_reader :host
+    attr_reader :log_path
     attr_reader :port
     attr_reader :statements
 
@@ -11,6 +12,7 @@ class CEPMon
       @statements = {}
       @host = "0.0.0.0"
       @port = 8989
+      @log_path = nil
 
       instance_eval(File.read(cfg_file))
     end # def initialize
@@ -177,6 +179,11 @@ class CEPMon
   def listen(host, port = 8989)
     @host = host
     @port = port.to_i
+  end
+
+  private
+  def logfile(path)
+    @log_path = path
   end
 
   end # class Config
