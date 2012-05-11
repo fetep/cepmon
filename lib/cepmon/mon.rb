@@ -43,8 +43,9 @@ class CEPMon
 
       amqp.start
       queue = amqp.queue("cepmon-#{Process.pid}", :auto_delete => true)
-      # Queues should typically be declared by producers no? Making exchange configurable
-      exchange = amqp.exchange(@config.amqp[:exchange] , :type => :topic, :durable => true)
+      exchange = amqp.exchange(@config.amqp[:exchange_metrics],
+                               :type => :topic,
+                               :durable => true)
       queue.bind(exchange)
 
       begin
