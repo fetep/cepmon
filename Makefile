@@ -1,4 +1,4 @@
-CEPMON_VERSION = 0.2
+CEPMON_VERSION = 0.3
 ESPER_VERSION = "4.2.0"
 
 METEO_FILES = esper/HoltWintersComputer.java esper/HoltWinters.java esper/HoltWintersViewFactory.java esper/TPAggregator.java publishers/EsperListener.java
