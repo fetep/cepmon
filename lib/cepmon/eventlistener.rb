@@ -80,7 +80,8 @@ class CEPMon
 
     public
     def expire_alerts
-      @alerts.delete_if { |key, alert| alert.expired? }.values
+      now = @engine.runtime.getCurrentTime / 1000
+      @alerts.delete_if { |key, alert| alert.expired?(now) }.values
     end
 
     public

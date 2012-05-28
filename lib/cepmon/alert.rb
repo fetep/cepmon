@@ -1,5 +1,6 @@
 class CEPMon
   class Alert
+    attr_reader :data
     attr_reader :started
     attr_reader :expires
 
@@ -24,8 +25,8 @@ class CEPMon
     end
 
     public
-    def expired?
-      Time.now.to_i > @expires
+    def expired?(now=Time.now.to_i)
+      now > @expires
     end # def expired?
 
     public
