@@ -39,3 +39,6 @@ rpm: jar
 
 clean:
 	rm -rf build
+
+test:
+	bin/cepmon test test.cfg test.data
