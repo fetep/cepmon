@@ -81,7 +81,11 @@ class CEPMon
     public
     def expire_alerts
       now = @engine.runtime.getCurrentTime / 1000
-      @alerts.delete_if { |key, alert| alert.expired?(now) }.values
+      @alerts.each do |key, alert|
+        next unless alert.expired?(now)
+        puts "ALERT EXPIRING: #{alert.to_json}"
+        @alerts.delete(key)
+      end
     end
 
     public
