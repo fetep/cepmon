@@ -60,7 +60,7 @@ class CEPMon
     private
     def threshold(name, metric, passed_opts = {})
       opts = {
-        :level => :host,  # :cluster or :host
+        :level => :host,  # :cluster_sum or :host
         :threshold => 0,
         :average_over => "5 min",
         :operator => nil,
@@ -74,31 +74,45 @@ class CEPMon
       end
 
       metric_safe = metric.tr('.', '_')
+      md = opts
+      md[:name] = metric
       case opts[:level]
-      when :cluster
-        group_by = "name, cluster"
-        select = "name, cluster"
+      when :cluster_sum
+        statement :name => "00_" + name + "_cluster_sum",
+                  :epl  => "insert into #{name}_cluster_sum " +
+                           "select name, cluster, sum(value) as value " +
+                           "from metric(name='#{metric}')." +
+                           "std:unique(name, host, cluster) " +
+                           "group by name, cluster " +
+                           "output first every 60 seconds",
+                  :metadata => {:statement => name + "_cluster_sum"},
+                  :listen => false
+
+        statement :name => name,
+                  :epl  => "select average as value, cluster " +
+                           "from #{name}_cluster_sum(name='#{metric}')." +
+                           "std:groupwin(name, cluster)." +
+                           "win:time(#{opts[:average_over]})." +
+                           "stat:uni(value, name, cluster) " +
+                           "group by name, cluster " +
+                           "having average " +
+                           "#{opts[:operator]} #{opts[:threshold]} " ,
+                  :metadata => md
       when :host
-        group_by = "name, cluster, host"
-        select = "name, host, cluster"
+        statement :name => name,
+                  :epl  => "select average as value, host, cluster " +
+                           "from metric(name='#{metric}')." +
+                           "std:groupwin(name, cluster, host)." +
+                           "win:time(#{opts[:average_over]})." +
+                           "stat:uni(value, name, cluster, host) " +
+                           "group by name, cluster, host " +
+                           "having average " +
+                           "#{opts[:operator]} #{opts[:threshold]} " +
+                           "output first every 90 seconds",
+                  :metadata => md
       else
         raise ArgumentError, "unknown :level (#{opts[:level]})"
       end
-
-      md = opts
-      md[:name] = metric
-
-      statement :name => name,
-                :epl  => "select average as value, cluster, host " +
-                         "from metric(name='#{metric}')." +
-                         "std:groupwin(#{group_by})." +
-                         "win:time(#{opts[:average_over]})." +
-                         "stat:uni(value, #{group_by}) " +
-                         "group by #{group_by} " +
-                         "having average " +
-                         "#{opts[:operator]} #{opts[:threshold]} " +
-                         "output first every 90 seconds",
-                :metadata => md
     end # def threshold
 
     private

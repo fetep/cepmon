@@ -1,5 +1,5 @@
 clear
-
+test.foo.colo1.host1 0 0
 test.foo.colo1.host1 0 20
 test.foo.colo1.host1 0 40
 test.foo.colo1.host1 0 60
@@ -9,3 +9,47 @@ test.foo.colo1.host1 1.2 120
 assert_inactive test_host_gt
 test.foo.colo1.host1 1.0 140
 assert_active test_host_gt
+
+# alert expiration (90 seconds)
+test.foo.colo1.host1 0.2 160
+test.foo.colo1.host1 0.0 180
+test.foo.colo1.host1 0.0 200
+test.foo.colo1.host1 0.0 220
+test.foo.colo1.host1 0.0 240
+test.foo.colo1.host1 0.0 260
+test.foo.colo1.host1 0.0 280
+assert_inactive test_host_gt
+
+clear
+test.foo.colo1.host1 0.44 0
+test.foo.colo1.host2 0.45 0
+test.foo.colo1.host1 0.44 20
+test.foo.colo1.host2 0.58 20
+test.foo.colo1.host1 0.65 40
+test.foo.colo1.host2 0.59 40
+test.foo.colo1.host1 0.62 60
+test.foo.colo1.host2 0.64 60
+test.foo.colo1.host1 0.60 80
+test.foo.colo1.host2 0.60 80
+test.foo.colo1.host1 0.59 100
+test.foo.colo1.host2 0.65 100
+test.foo.colo1.host1 0.62 120
+test.foo.colo1.host2 0.63 120
+assert_active test_cluster_gt
+
+# alert expiration (90 seconds)
+test.foo.colo1.host1 0.2 140
+test.foo.colo1.host2 0.1 140
+test.foo.colo1.host1 0.0 160
+test.foo.colo1.host2 0.0 160
+test.foo.colo1.host1 0.0 180
+test.foo.colo1.host2 0.0 180
+test.foo.colo1.host1 0.0 200
+test.foo.colo1.host2 0.0 200
+test.foo.colo1.host1 0.0 220
+test.foo.colo1.host2 0.0 220
+test.foo.colo1.host1 0.0 240
+test.foo.colo1.host2 0.0 240
+test.foo.colo1.host1 0.0 260
+test.foo.colo1.host2 0.0 260
+assert_inactive test_cluster_gt
