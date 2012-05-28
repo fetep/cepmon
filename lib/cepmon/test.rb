@@ -7,7 +7,7 @@ class CEPMon
     def initialize(config)
       @config = config
       @engine = CEPMon::Engine.new
-      @event_listener = CEPMon::EventListener.new(@engine)
+      @event_listener = CEPMon::EventListener.new(@engine, @config)
       @engine.add_statements(@config, @event_listener)
     end
 
@@ -23,36 +23,21 @@ class CEPMon
           when "clear"
             @engine.admin.destroyAllStatements()
             @engine.add_statements(@config, @event_listener)
-            @event_listener.clear_history
-          when /^assert (!)?([^ ]+)( .*)?/
-            negate, statement, variables = $1, $2, $3
-
-            if negate
-              # make sure the statement hasn't fired
-              hist = @event_listener.history.select { |h| h[0] == statement }
-              if hist.length > 0
-                raise "#{file}:#{linenum}: assert !#{statement} failed, rule fired: #{hist.inspect}"
+            @event_listener.clear
+          when /^(assert_active|assert_inactive) (.+)/
+            assert_type, statement = $1, $2
+            match = false
+            @event_listener.alerts.each do |a|
+              if a.data[:statement] == statement
+                match = true
+                break
               end
-
-              next
             end
 
-            # make sure the statement fired
-            hist = @event_listener.alerts.select { |key, alert| alert.statement == statement }
-            if hist.length == 0
-              raise "#{file}:#{linenum}: assert #{statement} failed, did not fire"
-            end
-
-            # check variables
-            variables ||= ""
-            variables.strip.split(/ +/).each do |eq|
-              var, value = eq.split("=", 2)
-              # use the first event that fired
-              event_vars = hist.first[1]
-              #puts "checking #{var} == #{value.inspect}: #{event_vars[var].inspect}"
-              if value != event_vars[var].to_s
-                raise "#{file}:#{linenum}: assert #{statement} #{var}==#{value} failed, actual value is #{event_vars[var]}"
-              end
+            if assert_type == "assert_active" and match == false
+              raise "#{file}:#{linenum}: assert_active #{statement} failed"
+            elsif assert_type == "assert_inactive" and match == true
+              raise "#{file}:#{linenum}: assert_inactive #{statement} failed"
             end
           else
             CEPMon::Metric.new(line).send(@engine)

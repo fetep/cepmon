@@ -1,0 +1,11 @@
+clear
+
+test.foo.colo1.host1 0 20
+test.foo.colo1.host1 0 40
+test.foo.colo1.host1 0 60
+test.foo.colo1.host1 0.4 80
+test.foo.colo1.host1 0.9 100
+test.foo.colo1.host1 1.2 120
+assert_inactive test_host_gt
+test.foo.colo1.host1 1.0 140
+assert_active test_host_gt
