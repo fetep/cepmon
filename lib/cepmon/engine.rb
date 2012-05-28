@@ -43,8 +43,10 @@ class CEPMon
     def add_statements(config, event_listener)
       config.statements.sort.each do |name, opts|
         statement = @admin.createEPL(opts[:epl], name.to_s)
-        statement.addListener(event_listener) unless opts[:listen] == false
-        @statement_md[name] = opts[:metadata] ? opts[:metadata] : {}
+        statement.addListener(event_listener) if opts[:listen]
+        opts[:metadata] ||= {}
+        opts[:metadata][:listen] = opts[:listen]
+        @statement_md[name] = opts[:metadata]
       end
     end # def add_statements
 

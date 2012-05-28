@@ -38,6 +38,10 @@ class CEPMon
         raise "duplicate statement name #{name}"
       end
 
+      if params[:listen].nil?
+        params[:listen] = true
+      end
+
       @statements[name] = params
     end # def statement
 
@@ -82,10 +86,11 @@ class CEPMon
                   :epl  => "insert into #{name}_cluster_sum " +
                            "select name, cluster, sum(value) as value " +
                            "from metric(name='#{metric}')." +
+                           "win:time(60 seconds)." +
                            "std:unique(name, host, cluster) " +
                            "group by name, cluster " +
-                           "output first every 60 seconds",
-                  :metadata => {:statement => name + "_cluster_sum"},
+                           "output last every 60 seconds",
+                  :metadata => {:name => "_" + name + "_cluster_sum"},
                   :listen => false
 
         statement :name => name,

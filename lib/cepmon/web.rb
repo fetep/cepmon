@@ -56,6 +56,24 @@ class CEPMon
         end
         return res
       end
+
+      def self_link(new_params = {})
+        link = URI.parse(request.url)
+        query_string = link.query || ""
+        query = {}
+
+        query_string.split('&').each do |kv|
+          k, v = kv.split('=', 2).collect { |x| x ? CGI.unescape(x) : "" }
+          query[k] = v
+        end
+
+        query.merge!(new_params)
+        link.query = query.collect do |k, v|
+          [k, v].collect { |x| x ? CGI.escape(x) : "" }.join('=')
+        end.join('&')
+
+        link.to_s
+      end
     end
 
     # This is lame, but sinatra's built-in static routes don't seem
@@ -70,7 +88,11 @@ class CEPMon
     end
 
     get "/rules" do
+      @filter = params[:filter] || "alert"
       @rules = @@event_listener.engine.statements
+      if @filter == "alert"
+        @rules.delete_if { |r| not r[:listen] }
+      end
       erb :rules
     end
 

@@ -1,7 +1,15 @@
 <div class="page-header">
-  <h1>
-    Alert Rules
-  </h1>
+  <% if @filter == "alert" %>
+    <h1>
+      Rules (alerting)
+    </h1>
+    <a href="<%= self_link('filter' => 'none') %>">show all rules</a>
+  <% elsif @filter == "none" %>
+    <h1>
+      Rules (all)
+    </h1>
+    <a href="<%= self_link('filter' => 'alert') %>">show alerting rules only</a>
+  <% end %>
 </div>
 
 <%= erb :rule_table %>
