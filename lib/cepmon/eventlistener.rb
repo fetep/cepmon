@@ -3,8 +3,6 @@ require "cepmon/alert"
 require "rubygems"
 require "bunny"
 
-$stderr.puts "being loaded"
-
 class CEPMon
   class EventListener < Java::JavaLang::Object
     include com.espertech.esper.client.StatementAwareUpdateListener
