@@ -48,18 +48,20 @@ class CEPMon
                                :durable => true)
       queue.bind(exchange)
 
-      begin
-        queue.subscribe do |msg|
-          msg[:payload].split("\n").each do |line|
-            CEPMon::Metric.new(line).send(@engine)
+      Thread.new do
+        begin
+          queue.subscribe do |msg|
+            msg[:payload].split("\n").each do |line|
+                CEPMon::Metric.new(line).send(@engine)
+            end
           end
-        end
-      rescue Bunny::ServerDownError, Bunny::ConnectionError
-        if ! @shutting_down
-          # TODO: implement reconnect
-          throw
-        end
-      end # begin
+        rescue Bunny::ServerDownError, Bunny::ConnectionError
+          if ! @shutting_down
+            # TODO: implement reconnect
+            throw
+          end
+        end # begin
+      end.join # Thread.new
     end # def run
   end # class Mon
 end # class CEPMon
