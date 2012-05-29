@@ -53,7 +53,7 @@ class CEPMon
                                :type => :topic,
                                :durable => true)
       queue.bind(exchange)
-      @config.logger.info("connected; bound queue cepmon-#{Process.pid} to topic #{config.amqp[:exchange_metrics]}")
+      @config.logger.info("connected; bound queue cepmon-#{Process.pid} to topic #{@config.amqp[:exchange_metrics]}")
 
       Thread.new do
         begin
