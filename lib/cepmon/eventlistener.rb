@@ -61,6 +61,8 @@ class CEPMon
       if @alerts[key]
         @alerts[key].update(vars)
       else
+        vars[:cluster] ||= '*' # for global-level aggregation
+        vars[:host] ||= '*'    # for cluster-level aggregation
         alert = CEPMon::Alert.new(vars)
         @config.logger.info("NEW ALERT: #{statement_name}: cluster=#{alert.data[:cluster]} host=#{alert.data[:host]} reason=#{alert.reason}")
         @config.logger.debug("NEW ALERT: json: #{alert.to_json}")

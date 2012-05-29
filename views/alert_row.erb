@@ -23,7 +23,7 @@
     <%= @alert.cluster %>
   </td>
   <td>
-    <%= @alert.host ? @alert.host.tr("_", ".") : "*" %>
+    <%= @alert.host.tr("_", ".") %>
   </td>
   <td>
     <%=h @alert.reason %>
