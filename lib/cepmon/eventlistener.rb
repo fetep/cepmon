@@ -28,12 +28,6 @@ class CEPMon
       else
         @exchange = nil
       end
-
-      if @config.log_path
-        @log = File.open(@config.log_path, "a+")
-      else
-        @log = nil
-      end
     end
 
     public
@@ -47,8 +41,7 @@ class CEPMon
         vars[:statement] = statement.getName
         vars[:timestamp] = timestamp
 
-        puts "event: #{statement.getName} @#{timestamp} (#{Time.at(timestamp.to_i)}) (engine.uptime=#{@engine.uptime}): #{vars.collect { |h, k| [h, k.inspect].join("=") }.join(" ")}"
-        $stderr.puts "event vars=#{vars.inspect}"
+        @config.logger.debug("CEP event: #{statement.getName}: @#{timestamp} (#{Time.at(timestamp.to_i)}) (engine.uptime=#{@engine.uptime}): #{vars.inspect}")
         record_alert(vars, statement.getName, @exchange)
       end
     end # def update
@@ -69,8 +62,9 @@ class CEPMon
         @alerts[key].update(vars)
       else
         alert = CEPMon::Alert.new(vars)
+        @config.logger.info("NEW ALERT: #{statement_name}: cluster=#{alert.data[:cluster]} host=#{alert.data[:host]} reason=#{alert.reason}")
+        @config.logger.debug("NEW ALERT: json: #{alert.to_json}")
         exchange.publish(alert.to_json) if exchange
-        @log.puts alert.to_json if @log
         @alerts[key] = alert
         @history << alert
       end
@@ -81,7 +75,7 @@ class CEPMon
       now = @engine.runtime.getCurrentTime / 1000
       @alerts.each do |key, alert|
         next unless alert.expired?(now)
-        puts "ALERT EXPIRING: #{alert.to_json}"
+        @config.logger.info("ALERT EXPIRING: #{alert.data[:statement]} cluster=#{alert.data[:cluster]} host=#{alert.data[:host]}")
         @alerts.delete(key)
       end
     end

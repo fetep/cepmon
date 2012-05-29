@@ -1,8 +1,10 @@
+require "logger"
+
 class CEPMon
   class Config
     attr_reader :amqp
     attr_reader :host
-    attr_reader :log_path
+    attr_reader :logger
     attr_reader :port
     attr_reader :statements
 
@@ -12,10 +14,24 @@ class CEPMon
       @statements = {}
       @host = "0.0.0.0"
       @port = 8989
-      @log_path = nil
+      @logger = Logger.new(STDOUT)
+      @logger.progname = "cepmon"
+      @logger.level = Logger::INFO
 
       instance_eval(File.read(cfg_file))
     end # def initialize
+
+    private
+    def log(params)
+      if params[:path]
+        @logger = Logger.new(params[:path])
+        @logger.level = Logger::INFO
+      end
+
+      if params[:debug]
+        @logger.level = Logger::DEBUG
+      end
+    end
 
     private
     def verify_present(params, required)
@@ -198,11 +214,6 @@ class CEPMon
   def listen(host, port = 8989)
     @host = host
     @port = port.to_i
-  end
-
-  private
-  def logfile(path)
-    @log_path = path
   end
 
   end # class Config

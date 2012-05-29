@@ -46,13 +46,14 @@ class CEPMon
         end
       end
 
-      puts "connecting to rabbitmq..."
+      @config.logger.info("connecting to rabbitmq...")
       amqp.start
       queue = amqp.queue("cepmon-#{Process.pid}", :auto_delete => true)
       exchange = amqp.exchange(@config.amqp[:exchange_metrics],
                                :type => :topic,
                                :durable => true)
       queue.bind(exchange)
+      @config.logger.info("connected; bound queue cepmon-#{Process.pid} to topic #{config.amqp[:exchange_metrics]}")
 
       Thread.new do
         begin

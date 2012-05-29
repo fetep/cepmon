@@ -36,12 +36,6 @@ class CEPMon
     end
 
     public
-    def to_s
-      "#{Time.at(@data[:timestamp])} [ALERT] cluster=#{@data[:cluster]}/host=#{@data[:host]} " +
-      "| name=#{@data[:name]} | value=#{@data[:value]} | statement=#{@data[:statement]}"
-    end # def to_s
-
-    public
     def to_json(*args)
       @data.merge({
         :started => @started,
