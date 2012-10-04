@@ -8,7 +8,7 @@ class CEPMon
       name, value, timestamp = metric.split(" ", 3)
       # name is of form "some.variable.name.cluster.host"
       parts = name.split(".")
-      if parts.length < 3
+      if parts.length < 2
         raise "invalid metric name: #{name}"
       end
       self["host"] = parts.pop
