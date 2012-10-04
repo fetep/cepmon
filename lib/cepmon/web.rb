@@ -87,6 +87,10 @@ class CEPMon
       File.read(File.join(settings.public_folder, file))
     end
 
+    get "/" do
+      redirect "/rules"
+    end
+
     get "/rules" do
       @filter = params[:filter] || "alert"
       @rules = @@event_listener.engine.statements
