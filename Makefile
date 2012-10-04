@@ -1,4 +1,4 @@
-CEPMON_VERSION = 0.4
+CEPMON_VERSION = 0.5
 ESPER_VERSION = "4.2.0"
 
 METEO_FILES = esper/HoltWintersComputer.java esper/HoltWinters.java esper/HoltWintersViewFactory.java esper/TPAggregator.java publishers/EsperListener.java
@@ -36,6 +36,12 @@ rpm: jar
 	mkdir -p build/root/opt/cepmon
 	cp build/cepmon.jar build/root/opt/cepmon/cepmon.jar
 	(cd build; fpm -t rpm -d jre -a noarch -n cepmon -v $(CEPMON_VERSION) -s dir -C root opt)
+
+deb: jar
+	rm -rf build/root
+	mkdir -p build/root/opt/cepmon
+	cp build/cepmon.jar build/root/opt/cepmon/cepmon.jar
+	(cd build; fpm -t deb -a all -n cepmon -v $(CEPMON_VERSION) -s dir -C root opt)
 
 clean:
 	rm -rf build
