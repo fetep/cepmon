@@ -35,6 +35,18 @@ class CEPMon
         sleep(0.5)
       end
 
+      if @config.amqp.length > 0 && @config.tcp.length > 0
+        raise "no support for both amqp and tcp inputs at once"
+      elsif @config.amqp.length > 0
+        run_amqp
+      elsif @config.tcp.length > 0
+        run_tcp
+      else
+        raise "no inputs configured"
+      end
+    end # def run
+
+    def run_amqp
       amqp = Bunny.new(@config.amqp)
 
       [:TERM, :INT].each do |sig|
@@ -69,6 +81,49 @@ class CEPMon
           end
         end # begin
       end.join # Thread.new
-    end # def run
+    end # def run_amqp
+
+    def run_tcp
+      sock = TCPServer.new(@config.tcp[:host], @config.tcp[:port])
+
+      [:TERM, :INT].each do |sig|
+        Signal.trap(sig) do
+          @shutting_down = true
+          @web_thread[:sinatra].quit!(@server, "")
+          sock.close
+          @engine.destroy
+        end
+      end
+
+      @config.logger.info("listening for carbon updates on " + 
+                          "#{@config.tcp[:host]}:#{@config.tcp[:port]}")
+
+      queue = Queue.new
+      Thread.new do
+        while line = queue.pop
+          begin
+            CEPMon::Metric.new(line).send(@engine)
+          rescue
+            @config.logger.warn("error parsing metric #{line.inspect}: #{$!}")
+          end
+        end
+      end
+
+      loop do
+        Thread.start(sock.accept) do |client|
+          begin
+            while line = client.gets
+              line.chomp!
+              next if line == ""
+              queue << line
+            end
+          rescue
+            @config.logger.warn("read error with client #{client.peeraddr[2]}: #{$!}")
+            client.close rescue nil
+          end
+        end
+      end
+    end # def run_amqp
+
   end # class Mon
 end # class CEPMon

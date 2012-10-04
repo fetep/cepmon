@@ -7,10 +7,12 @@ class CEPMon
     attr_reader :logger
     attr_reader :port
     attr_reader :statements
+    attr_reader :tcp
 
     public
     def initialize(cfg_file="cepmon.cfg")
       @amqp = {}
+      @tcp = {}
       @statements = {}
       @host = "0.0.0.0"
       @port = 8989
@@ -76,6 +78,11 @@ class CEPMon
     def amqp_input(params)
       @amqp = params
     end # def amqp_input
+
+    private
+    def tcp_input(params)
+      @tcp = params
+    end # def tcp_input
 
     private
     def threshold(name, metric, passed_opts = {})
