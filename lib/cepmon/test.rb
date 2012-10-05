@@ -40,7 +40,7 @@ class CEPMon
               raise "#{file}:#{linenum}: assert_inactive #{statement} failed"
             end
           else
-            CEPMon::Metric.new(line).send(@engine)
+            CEPMon::Metric.new(line).send(@engine, true)
           end # case line
         end # File.open
       end # args.each

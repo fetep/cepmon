@@ -2,27 +2,31 @@ require "cepmon/libs"
 
 class CEPMon
   class Metric < Java::JavaUtil::HashMap
+    attr_reader :line
+
     def initialize(metric)
       super()
 
-      name, value, timestamp = metric.split(" ", 3)
+      @line = metric
+      metric_parts = metric.split(" ", 3)
+      if metric_parts.length != 3
+        raise "invalid metric update: #{metric.inspect}"
+      end
+      name, value, timestamp = metric_parts
       # name is of form "some.variable.name.cluster.host"
-      parts = name.split(".")
-      if parts.length < 2
+      name_parts = name.split(".")
+      if name_parts.length < 3
         raise "invalid metric name: #{name}"
       end
-      self["host"] = parts.pop
-      self["cluster"] = parts.pop
-      self["name"] = parts.join(".")
+      self["host"] = name_parts.pop
+      self["cluster"] = name_parts.pop
+      self["name"] = name_parts.join(".")
       self["value"] = value.to_f
       self["timestamp"] = timestamp.to_i
     end
 
-    def send(engine)
-      # set the time
-      engine.set_time(self["timestamp"] * 1000)
-
-      # send the value
+    def send(engine, set_time=false)
+      engine.set_time(self["timestamp"] * 1000) if set_time
       engine.runtime.sendEvent(self, "metric")
     end
 
