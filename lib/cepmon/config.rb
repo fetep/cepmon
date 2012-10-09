@@ -111,8 +111,7 @@ class CEPMon
                            "from metric(name='#{metric}')." +
                            "win:time(60 seconds)." +
                            "std:unique(name, host, cluster) " +
-                           "group by name, cluster " +
-                           "output last every 60 seconds",
+                           "group by name, cluster ",
                   :metadata => {:name => "_" + name + "_cluster_sum"},
                   :listen => false
 
@@ -135,8 +134,7 @@ class CEPMon
                            "stat:uni(value, name, cluster, host) " +
                            "group by name, cluster, host " +
                            "having average " +
-                           "#{opts[:operator]} #{opts[:threshold]} " +
-                           "output first every 90 seconds",
+                           "#{opts[:operator]} #{opts[:threshold]} ",
                   :metadata => md
       else
         raise ArgumentError, "unknown :level (#{opts[:level]})"
@@ -185,7 +183,7 @@ class CEPMon
               :listen => false
 
     statement :name => name,
-              :epl  => "select average as value, cluster, host from metric_delta_stream(name='#{metric}').std:groupwin(#{group_by}).win:time(#{opts[:average_over]}).stat:uni(value, #{group_by}) group by #{group_by} having average #{opts[:operator]} #{opts[:threshold]} output first every 90 seconds",
+              :epl  => "select average as value, cluster, host from metric_delta_stream(name='#{metric}').std:groupwin(#{group_by}).win:time(#{opts[:average_over]}).stat:uni(value, #{group_by}) group by #{group_by} having average #{opts[:operator]} #{opts[:threshold]} ",
               :metadata => md
   end # def threshold_counter
 

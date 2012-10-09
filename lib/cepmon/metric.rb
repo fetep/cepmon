@@ -25,8 +25,12 @@ class CEPMon
       self["timestamp"] = timestamp.to_i
     end
 
-    def send(engine, set_time=false)
-      engine.set_time(self["timestamp"] * 1000) if set_time
+    def send(engine, use_metric_time=false)
+      if use_metric_time
+        engine.set_time(self["timestamp"] * 1000)
+      else
+        engine.set_time(Time.now.to_f * 1000)
+      end
       engine.runtime.sendEvent(self, "metric")
     end
 
